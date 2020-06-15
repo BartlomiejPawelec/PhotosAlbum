@@ -31,6 +31,9 @@ export const getPhotosAlbum = () => {
       .get("https://jsonplaceholder.typicode.com/photos")
       .then((response) => {
         dispatch(photoAlbumSuccess(response.data))
-      });
+      })
+      .catch(error => {
+        dispatch(photoAlbumFail(error))
+      })
   };
 };

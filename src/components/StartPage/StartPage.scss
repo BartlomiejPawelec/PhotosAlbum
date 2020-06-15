@@ -1,0 +1,21 @@
+.start-page{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .start-page__header{
+        margin: 0;
+        font-size: 45px;
+        font-family: 'Patua One', cursive;
+        position: relative;
+
+        span{
+            position: absolute;
+            right: -40px;
+            font-size: 30px;
+            top: 40px;
+        }
+    }
+}
