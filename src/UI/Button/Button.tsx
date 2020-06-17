@@ -7,16 +7,16 @@ interface ButtonProps {
   onClick: (e:any) => void;
 }
 
-const Button = (props: ButtonProps) => {
+const Button = React.memo((props: ButtonProps) => {
   const classes = props.classes ? `button ${props.classes}` : `button`;
 
-  console.log('dostaje render')
+  console.log('button dostaje render')
 
   return (
     <>
       <button onClick={props.onClick} className={classes}>{props.children}</button>
     </>
   );
-};
+});
 
 export default Button;

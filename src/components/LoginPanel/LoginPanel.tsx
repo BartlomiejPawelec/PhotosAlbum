@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState } from "react";
 import "./LoginPanel.scss";
 import Input from "../../UI/Input/Input";
 import Button from "../../UI/Button/Button";
@@ -12,25 +12,16 @@ const LoginPanel = (props: LoginPanelProps) => {
     password: "",
   });
 
-  const handleForm = useCallback(
-    (e: any) => {
-      console.log("juz");
-      setForm({
-        ...form,
-        [e.target.name]: e.target.value,
-      });
-    },
-    [form]
-  );
+  const handleForm = (e: any) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleLogin = (e: any) => {
     e.preventDefault();
-    console.log("Form State:", form);
   };
-
-  const LoginButton = useMemo(() => {
-    return <Button onClick={(e) => handleLogin(e)}>Login</Button>;
-  }, [handleLogin]);
 
   return (
     <div className="login-panel">
@@ -49,8 +40,8 @@ const LoginPanel = (props: LoginPanelProps) => {
           name="password"
           onChange={(e) => handleForm(e)}
         />
-        <Link to={`/register`}>Register</Link>
-        {LoginButton}
+        <Link to={`/start/register`}>Don't have account?</Link>
+        <Button onClick={(e) => handleLogin(e)}>Login</Button>
       </form>
     </div>
   );

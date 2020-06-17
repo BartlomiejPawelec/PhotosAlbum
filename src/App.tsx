@@ -7,9 +7,8 @@ import StartPage from "./components/StartPage/StartPage";
 import {
   BrowserRouter as Router,
   Route,
-  Link,
   Redirect,
-  Switch,
+  Switch
 } from "react-router-dom";
 import LoginPanel from "./components/LoginPanel/LoginPanel";
 import RegisterPanel from "./components/RegisterPanel/RegisterPanel";
@@ -32,14 +31,22 @@ function App() {
     <Router>
       <Provider store={store}>
         <div className="App">
-          <Redirect from="/" to="login"/>
-          <StartPage>
-            <Switch>
-              <Route exact path="/login" component={LoginPanel} />
-              <Route exact path="/register" component={RegisterPanel} />
-            </Switch>
-          </StartPage>
-          <Route exact path="/album" component={AlbumPage}/>
+          <Switch>
+            <Route path="/start/login" exact>
+              <StartPage>
+                <LoginPanel />
+              </StartPage>
+            </Route>
+            <Route path="/start/register" exact>
+              <StartPage>
+                <RegisterPanel />
+              </StartPage>
+            </Route>
+            <Route path="/album" exact>
+              <AlbumPage />
+            </Route>
+            <Redirect from="/" to="/start/login" exact/>
+          </Switch>
         </div>
       </Provider>
     </Router>

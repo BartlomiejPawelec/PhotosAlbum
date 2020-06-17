@@ -12,6 +12,7 @@ interface InputProps {
 
 const Input = (props: InputProps) => {
   const classes = props.classes ? `input ${props.classes}` : `input`;
+  console.log('redner')
 
   return (
     <>
