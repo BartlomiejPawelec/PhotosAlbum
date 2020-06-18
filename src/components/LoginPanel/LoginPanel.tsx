@@ -5,6 +5,7 @@ import Button from "../../UI/Button/Button";
 import { Link, useHistory, Redirect } from "react-router-dom";
 import firebaseApp from "../firebase/config/firebase.config";
 import { AuthContext } from "../../Auth/Auth";
+import Loading from "../Loading/Loading";
 
 interface LoginPanelProps {}
 
@@ -33,15 +34,21 @@ const LoginPanel = (props: LoginPanelProps) => {
     }
   };
 
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, loading } = useContext(AuthContext);
 
   if (currentUser) {
-    return <Redirect to="/album" />;
+    return (
+      <>
+      <Loading />
+      <Redirect to="/album" />
+      </>
+    )
   }
 
   return (
     <div className="login-panel">
-      <form className="login-panel__form">
+      {!loading ? (
+        <form className="login-panel__form">
         <Input
           type="text"
           label="Email"
@@ -50,7 +57,7 @@ const LoginPanel = (props: LoginPanelProps) => {
           onChange={(e) => handleForm(e)}
         />
         <Input
-          type="text"
+          type="password"
           label="Password"
           value={form.password}
           name="password"
@@ -59,6 +66,10 @@ const LoginPanel = (props: LoginPanelProps) => {
         <Link to={`/start/register`}>Don't have account?</Link>
         <Button onClick={(e) => handleLogin(e)}>Login</Button>
       </form>
+      ) : (
+        <Loading />
+      )}
+        
     </div>
   );
 };

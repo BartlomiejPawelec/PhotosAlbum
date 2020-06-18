@@ -4,6 +4,7 @@ import Input from "../../UI/Input/Input";
 import Button from "../../UI/Button/Button";
 import { Link, useHistory } from "react-router-dom";
 import firebaseApp from "../firebase/config/firebase.config";
+import ErrorMessage from "../../UI/ErrorMessage/ErrorMessage";
 
 interface RegisterPanelProps {}
 
@@ -13,27 +14,50 @@ const RegisterPanel = (props: RegisterPanelProps) => {
   const [form, setForm] = useState({
     email: "",
     password: "",
+    valid: false,
+    error: ''
   });
 
   const handleForm = (e: any) => {
     setForm({
       ...form,
+      valid: false,
+      error: '',
       [e.target.name]: e.target.value,
     });
   };
 
   const handleRegister = (e: any) => {
     e.preventDefault();
-    try {
-      firebaseApp
-        .auth()
-        .createUserWithEmailAndPassword(form.email, form.password);
-      alert("Account created!");
-      history.push("/start/login");
-    } catch (error) {
-      console.log(error);
+    let emailRegex = /\S+@\S+\.\S+/;
+
+    if (emailRegex.test(form.email) && form.password.length >= 5) {
+      setForm({
+        ...form,
+        valid: true
+      })
+      try {
+        firebaseApp
+          .auth()
+          .createUserWithEmailAndPassword(form.email, form.password);
+
+        alert("Account created!");
+        history.push("/start/login");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    else{
+      setForm({
+        ...form,
+        valid: false,
+        error: 'Incorrect email or password!'
+      })
     }
   };
+
+  
+
   return (
     <div className="register-panel">
       <form className="register-panel__form">
@@ -51,6 +75,8 @@ const RegisterPanel = (props: RegisterPanelProps) => {
           value={form.password}
           onChange={(e) => handleForm(e)}
         />
+
+        {!form.valid && <ErrorMessage color="red" fontSize={15}>{form.error}</ErrorMessage>}
         <Link to="/start/login">Back to login</Link>
         <Button onClick={(e) => handleRegister(e)}>Register</Button>
       </form>

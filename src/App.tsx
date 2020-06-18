@@ -37,8 +37,9 @@ const App = (props: AppProps) => {
               </StartPage>
             </Route>
             <ProtectedRoute exact path="/album" component={AlbumPage} />
-            <Route component={NotFound} />
             <Redirect from="/" to="/start/login" exact />
+            <Route component={NotFound} />
+            
           </Switch>
         </div>
         </AuthProvider>
