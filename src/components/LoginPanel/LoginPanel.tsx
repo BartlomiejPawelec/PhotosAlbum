@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./LoginPanel.scss";
 import Input from "../../UI/Input/Input";
 import Button from "../../UI/Button/Button";
-import { Link } from "react-router-dom";
+import { Link, useHistory, Redirect } from "react-router-dom";
+import firebaseApp from "../firebase/config/firebase.config";
+import { AuthContext } from "../../Auth/Auth";
 
 interface LoginPanelProps {}
 
 const LoginPanel = (props: LoginPanelProps) => {
+  let history = useHistory();
+
   const [form, setForm] = useState({
-    login: "",
+    email: "",
     password: "",
   });
 
@@ -21,16 +25,28 @@ const LoginPanel = (props: LoginPanelProps) => {
 
   const handleLogin = (e: any) => {
     e.preventDefault();
+    try {
+      firebaseApp.auth().signInWithEmailAndPassword(form.email, form.password);
+      history.push("/album");
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  const { currentUser } = useContext(AuthContext);
+
+  if (currentUser) {
+    return <Redirect to="/album" />;
+  }
 
   return (
     <div className="login-panel">
       <form className="login-panel__form">
         <Input
           type="text"
-          label="Login"
-          value={form.login}
-          name="login"
+          label="Email"
+          value={form.email}
+          name="email"
           onChange={(e) => handleForm(e)}
         />
         <Input

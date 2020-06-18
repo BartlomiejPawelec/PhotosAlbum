@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import "./RegisterPanel.scss";
 import Input from "../../UI/Input/Input";
 import Button from "../../UI/Button/Button";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import firebaseApp from "../firebase/config/firebase.config";
 
 interface RegisterPanelProps {}
 
 const RegisterPanel = (props: RegisterPanelProps) => {
+  let history = useHistory();
+
   const [form, setForm] = useState({
-    login: "",
+    email: "",
     password: "",
   });
 
@@ -21,20 +24,30 @@ const RegisterPanel = (props: RegisterPanelProps) => {
 
   const handleRegister = (e: any) => {
     e.preventDefault();
-    console.log("Form State:", form);
+    try {
+      firebaseApp
+        .auth()
+        .createUserWithEmailAndPassword(form.email, form.password);
+      alert("Account created!");
+      history.push("/start/login");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="register-panel">
       <form className="register-panel__form">
         <Input
           type="text"
-          label="Login"
-          value={form.login}
+          label="Email"
+          name="email"
+          value={form.email}
           onChange={(e) => handleForm(e)}
         />
         <Input
           type="text"
           label="Password"
+          name="password"
           value={form.password}
           onChange={(e) => handleForm(e)}
         />

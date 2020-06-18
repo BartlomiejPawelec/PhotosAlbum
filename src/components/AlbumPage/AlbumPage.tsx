@@ -4,7 +4,7 @@ import './AlbumPage.scss';
 const AlbumPage = () => {
     return(
         <div className="album-page">
-            album page
+            Welcome to Album page
         </div>
     )
 }

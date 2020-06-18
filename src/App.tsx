@@ -1,35 +1,29 @@
 import React from "react";
-import thunk from "redux-thunk";
-import { createStore, compose, combineReducers, applyMiddleware } from "redux";
-import { Provider } from "react-redux";
-import PhotosReducer from "./store/photoAlbum/reducerCreators/photoAlbumReducers";
+
 import StartPage from "./components/StartPage/StartPage";
 import {
   BrowserRouter as Router,
   Route,
   Redirect,
-  Switch
+  Switch,
 } from "react-router-dom";
 import LoginPanel from "./components/LoginPanel/LoginPanel";
 import RegisterPanel from "./components/RegisterPanel/RegisterPanel";
 import AlbumPage from "./components/AlbumPage/AlbumPage";
+import { connect } from "react-redux";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import { AuthProvider } from "./Auth/Auth";
+import NotFound from "./components/NotFound/NotFound";
 
-export const composeEnhancers =
-  (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
-const rootReducers = combineReducers({
-  photosAlbum: PhotosReducer,
-});
+interface AppProps {
+  photosAlbum?: any;
+}
 
-const store = createStore(
-  rootReducers,
-  composeEnhancers(applyMiddleware(thunk))
-);
-
-function App() {
+const App = (props: AppProps) => {
   return (
-    <Router>
-      <Provider store={store}>
+      <Router>
+        <AuthProvider>
         <div className="App">
           <Switch>
             <Route path="/start/login" exact>
@@ -42,15 +36,20 @@ function App() {
                 <RegisterPanel />
               </StartPage>
             </Route>
-            <Route path="/album" exact>
-              <AlbumPage />
-            </Route>
-            <Redirect from="/" to="/start/login" exact/>
+            <ProtectedRoute exact path="/album" component={AlbumPage} />
+            <Route component={NotFound} />
+            <Redirect from="/" to="/start/login" exact />
           </Switch>
         </div>
-      </Provider>
-    </Router>
+        </AuthProvider>
+      </Router>
   );
 }
 
-export default App;
+const mapStateToProps = (state: any) => {
+  return{
+    photosAlbum: state.photosAlbum
+  }
+}
+
+export default connect(mapStateToProps,null)(App);
