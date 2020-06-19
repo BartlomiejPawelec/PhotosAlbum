@@ -1,7 +1,8 @@
-import React from "react";
+import React, {useContext} from "react";
 import "./StartPage.scss";
 import { connect } from "react-redux";
 import { getPhotosAlbum } from "../../store/photoAlbum/actionCreators/photoAlbumActions";
+import { AuthContext } from "../../Auth/Auth";
 
 interface StartPageProps {
   onGetPhotosAlbum: () => void;
